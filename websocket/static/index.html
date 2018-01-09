@@ -2,43 +2,42 @@
 <html>
 <head>
     <script type="text/javascript">
-        function WebSocketTest()
-        {
-            if ("WebSocket" in window)
+        var ws;
+        function connect() {
+            ws= new WebSocket("ws://localhost:8080/echo");
+            ws.onopen = function()
             {
-                alert("WebSocket is supported by your Browser!");
-                // Let us open a web socket
-                var ws = new WebSocket("ws://localhost:8080/echo");
-                ws.onopen = function()
-                {
-                    // Web Socket is connected, send data using send()
-                    ws.send("Message to send");
-                    alert("Message is sent...");
-                };
-                ws.onmessage = function (evt)
-                {
-                    var received_msg = evt.data;
-                    alert("Message is received...");
-                };
-                ws.onclose = function()
-                {
-                    // websocket is closed.
-                    alert("Connection is closed...");
-                };
-            }
-            else
+                alert("connection is successful");
+            };
+            ws.onmessage = function (e)
             {
-                // The browser doesn't support WebSocket
-                alert("WebSocket NOT supported by your Browser!");
+                var msg = e.data;
+                var li=document.createElement("li");
+                li.innerText=msg;
+                document.getElementsByTagName("ul")[0].appendChild(li);
+            };
+            ws.onclose = function()
+            {
+                // websocket is closed.
+                alert("Connection is closed...");
+            };
+        }
+
+        function send() {
+            if(ws){
+                var msg=document.getElementById("txt").value;
+                ws.send(msg);
+                return;
             }
+            alert("connect first!!!");
         }
     </script>
 </head>
 <body>
 <div>
-    <a href="javascript:WebSocketTest()">Run WebSocket</a>
+    <a href="javascript:connect()">connect</a>
     <textarea id="txt" style="width: 100%"></textarea>
-    <button id="sendBtn">send</button>
+    <button id="sendBtn" onclick="send()">send</button>
     <ul>
 
     </ul>
