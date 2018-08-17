@@ -11,20 +11,20 @@ type lock struct {
 }
 
 func main(){
-	l:=lock{}
+	var l lock
 
 	go func() {
 		l.l.Lock()
 		defer l.l.Unlock()
 		fmt.Println("haha get the lock")
-		time.Sleep(1000*time.Second)
+		time.Sleep(3*time.Second)
 	}()
 
 	go func() {
 		l.l.Lock()
 		defer l.l.Unlock()
 		fmt.Println("xixi get the lock")
-		time.Sleep(1000*time.Second)
+		time.Sleep(2*time.Second)
 	}()
 
 	time.Sleep(1000*time.Second)
