@@ -5,15 +5,15 @@ import (
 	"time"
 )
 
-func main()  {
-	c:=make(chan struct{},1)
+func main() {
+	c := make(chan struct{}, 1)
 
 	go func() {
 		for {
 			select {
-				case <-c:
-					fmt.Println("haha done")
-					return
+			case <-c:
+				fmt.Println("haha done")
+				return
 			}
 		}
 	}()
@@ -21,18 +21,16 @@ func main()  {
 	go func() {
 		for {
 			select {
-				case <-c:
-					fmt.Println("xixi done")
-					return
+			case <-c:
+				fmt.Println("xixi done")
+				return
 			}
 		}
 	}()
 
-	time.Sleep(2*time.Second)
+	c <- struct{}{}
 
-	c<- struct{}{}
+	close(c)
 
-	//close(c)
-
-	time.Sleep(2*time.Second)
+	time.Sleep(2 * time.Second)
 }
